@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.6
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DioKftSite", "DioKftSite\DioKftSite.csproj", "{183D87C6-BF52-4353-AE00-C9B0CA654E61}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccessLayer", "DataAccessLayer\DataAccessLayer.csproj", "{D5FA7815-2B8F-41A2-9521-75202031169F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseTester", "DatabaseTester\DatabaseTester.csproj", "{D3D69C44-48D4-401B-A8EB-CDCDC73F6154}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{183D87C6-BF52-4353-AE00-C9B0CA654E61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{183D87C6-BF52-4353-AE00-C9B0CA654E61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{183D87C6-BF52-4353-AE00-C9B0CA654E61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{183D87C6-BF52-4353-AE00-C9B0CA654E61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5FA7815-2B8F-41A2-9521-75202031169F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5FA7815-2B8F-41A2-9521-75202031169F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5FA7815-2B8F-41A2-9521-75202031169F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5FA7815-2B8F-41A2-9521-75202031169F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3D69C44-48D4-401B-A8EB-CDCDC73F6154}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3D69C44-48D4-401B-A8EB-CDCDC73F6154}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3D69C44-48D4-401B-A8EB-CDCDC73F6154}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3D69C44-48D4-401B-A8EB-CDCDC73F6154}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
