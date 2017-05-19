@@ -1,10 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.Collections.Generic;
 
 namespace MS.WebSolutions.DioKft.DataAccessLayer.Entities
 {
     public class Category : EntityBase
     {
-        [ForeignKey("Category")]
-        public int ParentId { get; set; }
+        public int? ParentId { get; set; }
+
+        public virtual Category Parent { get; set; }
+        public virtual ICollection<Category> Children { get; set; }
+
     }
 }

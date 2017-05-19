@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Contexts\ContactContext.cs" />
+    <Compile Include="Contexts\ContextBase.cs" />
     <Compile Include="Contexts\ProductContext.cs" />
     <Compile Include="Entities\Category.cs" />
     <Compile Include="Entities\ProductDocument.cs" />

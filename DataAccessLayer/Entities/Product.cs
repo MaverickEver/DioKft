@@ -5,14 +5,21 @@ namespace MS.WebSolutions.DioKft.DataAccessLayer.Entities
 {
     public class Product : EntityBase
     {
-        [ForeignKey("Manufacturer")]
+       
         public int ManufacturerId { get; set; }
-        [ForeignKey("Category")]
         public int CategoryId { get; set; }
-        [ForeignKey("Unit")]
         public int UnitId { get; set; }
 
-        [InverseProperty("ProductId")]
+        [ForeignKey("ManufacturerId")]
+        public Manufacturer Manufacturer { get; set; }
+
+        [ForeignKey("CategoryId")]
+        public Category Category { get; set; }
+
+        [ForeignKey("UnitId")]
+        public Unit Unit { get; set; }
+
+        [InverseProperty("Product")]
         public List<ProductDocument> ProductDocuments { get; set; }
 
     }
