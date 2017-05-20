@@ -18,9 +18,36 @@ namespace MS.WebSolutions.DioKft.DatabaseTester
                 return;
             }
 
-            Console.WriteLine(ExecuteImportLogic(args[0]));
+            ClearDatabase();
+            var errors = ExecuteImportLogic(args[0]);
 
-            Console.ReadKey();
+            if (errors.Trim().Length == 0)
+            {
+                Console.WriteLine("Import have been executed without any issue.");
+            }
+            else
+            {
+                Console.WriteLine($"Missed items: {errors.ToString()}");
+            }
+            
+
+            Console.ReadLine();
+        }
+
+        private static void ClearDatabase()
+        {
+            using (var context = new ProductContext())
+            {
+                context.ProductDocuments.RemoveRange(context.ProductDocuments);
+                context.Categories.RemoveRange(context.Categories);
+                context.Manufacturers.RemoveRange(context.Manufacturers);
+                context.Units.RemoveRange(context.Units);
+                context.Products.RemoveRange(context.Products);
+
+                context.SaveChanges();
+            }
+
+            Console.WriteLine("Database Cleared.");
         }
 
         private static string ExecuteImportLogic(string filePath)
@@ -28,8 +55,7 @@ namespace MS.WebSolutions.DioKft.DatabaseTester
             var fileContent = File.ReadAllText(filePath);
 
             var rows = fileContent.Split('\n').Skip(1);
-            var missedRows = new StringBuilder("Missed items:");
-
+            var missedRows = new StringBuilder();
 
             using (var context = new ProductContext())
             {

@@ -1,33 +1,47 @@
 ﻿
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using MS.WebSolutions.DioKft.DataAccessLayer.Entities;
 using MS.WebSolutions.DioKft.DataAccessLayer.Contexts;
 
 namespace MS.WebSolutions.DioKft.DataAccessLayer.Repositories
 {
-    public class ContactRepository : IListableRepository, IRepository<Contact, int>
+    public class ContactRepository : RepositoryBase<ContactContext>, IRepository<Contact, int>
     {
-        private readonly ContactContext context;
-
-        public void Delete(Contact entity)
+        public void Delete(int id)
         {
-            throw new NotImplementedException();
-        }
+            Contact contactToDelete;
+            if (!TryGet(id, out contactToDelete)) { return; }
 
-        public Contact Get(int id)
-        {
-            throw new NotImplementedException();
+            this.context.Contacts.Remove(contactToDelete);
+            this.context.SaveChanges();
         }
 
         public IEnumerable<Contact> ListAll()
         {
-            throw new NotImplementedException();
+            return (from p in this.context.Contacts
+                    select p).ToList();
         }
 
         public void Save(Contact entity)
         {
-            throw new NotImplementedException();
+            if (entity is null)
+            {
+                throw new ArgumentNullException($"{nameof(entity)}");
+            }
+
+            this.context.Contacts.Add(entity);
+            this.context.SaveChanges();
+        }
+
+        public bool TryGet(int id, out Contact entity)
+        {
+            entity = (from p in this.context.Contacts
+                      where p.Id == id
+                      select p).SingleOrDefault();
+
+            return entity != null;
         }
     }
 }

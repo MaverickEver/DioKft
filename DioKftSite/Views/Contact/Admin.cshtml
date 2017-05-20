@@ -1,0 +1,28 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <h2>Create new contact</h2>
+    </div>
+
+    <div class="row">
+        <h2>Contact list</h2>
+        <div class="col-xs-12 col-sm-offset-1">
+            @{ for (int i = 0; i < 10; i++)
+                {                    
+                    @Html.Partial("_ContactItem", i);
+                }
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+ 
+</style>
+
+<script>
+
+</script>
