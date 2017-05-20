@@ -4,6 +4,8 @@ using MS.WebSolutions.DioKft.Models;
 using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
+using System.Web;
+using System.IO;
 
 namespace MS.WebSolutions.DioKft.Controllers
 {
@@ -18,16 +20,16 @@ namespace MS.WebSolutions.DioKft.Controllers
 
         public ActionResult Admin()
         {
-            var contacts = this.GetAllContacts();
-            return View(contacts);
+            var model = new AdminContactModel { Contacts = this.GetAllContacts() };       
+            return View(model);
         }
 
         [HttpPost]
         public ActionResult CreateContact(ContactModel newContact)
         {
-            if (newContact == null)
+            if (newContact == null || newContact.Image == null)
             {
-                throw new ArgumentNullException($"The {nameof(newContact)} cannot be null.");
+                throw new ArgumentNullException($"The {nameof(newContact)} and {nameof(newContact.Image)} cannot be null.");
             }
 
             var contactToSave = new Contact
@@ -35,21 +37,24 @@ namespace MS.WebSolutions.DioKft.Controllers
                 Name = newContact.Name,
                 Email = newContact.Email,
                 PhoneNumber = newContact.PhoneNumber,
-                Role = newContact.Role,
-                Imageurl = newContact.ImageUrl
-            };
+                Role = newContact.Role               
+            };            
 
             try
             {
-                var repository = new ContactRepository();
-                repository.Save(contactToSave);
+                using (var repository = new ContactRepository())
+                {
+                    repository.Save(contactToSave);
+                    this.UpdateImage(contactToSave.Id, newContact.Image, repository);
+                }
             }
             catch
             {
-                return Json("Saving of new contact has been failed.");
+                this.RemoveImage(contactToSave.ImageUrl);
+                return Json("Saving of new contact has been failed.");                
             }
 
-            return Json(newContact);
+            return PartialView("_ContactList",this.GetAllContacts());
         }
 
         [HttpPost]
@@ -57,32 +62,91 @@ namespace MS.WebSolutions.DioKft.Controllers
         {
             try
             {
-                var repository = new ContactRepository();
-                repository.Delete(id);
+                using (var repository = new ContactRepository())
+                {
+                    repository.Delete(id);
+                }
             }
             catch
-            {
+            {                
                 return Json("Removing contact has been failed.");
             }
 
-            return Json(id);
+            return Content(string.Empty);
         }
 
-        # region [BusinessLogic]
+        [HttpPost]
+        public ActionResult UpdateContactImage(int id, HttpPostedFileBase image)
+        {
+            ContactModel contactModel;
+            try
+            {
+                contactModel = this.UpdateImage(id, image);
+            }
+            catch
+            {
+                return Json("Updating contact has been failed.");
+            }
+
+            return PartialView("_ContactItem", contactModel);
+        }       
+
+        #region [BusinessLogic]
         private IEnumerable<ContactModel> GetAllContacts()
         {
-            var contactModelList = new List<ContactModel>();        
+            var contactModelList = new List<ContactModel>();
 
-            var repository = new ContactRepository();
-            var contanctsFromDb = repository.ListAll();
-
-            foreach (var contactInDb in contanctsFromDb)
+            using (var repository = new ContactRepository())
             {
-                var contactModel = (ContactModel)contactInDb;
-                contactModelList.Add(contactModel);
+                var contanctsFromDb = repository.ListAll();
+
+                foreach (var contactInDb in contanctsFromDb)
+                {
+                    var contactModel = (ContactModel)contactInDb;
+                    contactModelList.Add(contactModel);
+                }
+            }
+
+            return contactModelList;
+        }
+
+        private string SaveImage(int id, HttpPostedFileBase image)
+        {
+            var path = string.Empty;
+            try
+            {
+                var extension = Path.GetExtension(image.FileName);
+                path = $"~/Content/DynamicResources/ContactImages/{id}{extension}";
+                var serverPath = Server.MapPath(path);
+                image.SaveAs(serverPath);
+            }
+            catch
+            {
+                return string.Empty;
             }
             
-            return contactModelList;
+            return path;
+        }
+
+        private void RemoveImage(string imageurl)
+        {
+            if (!System.IO.File.Exists(imageurl)) { return; }
+
+            System.IO.File.Delete(imageurl);
+        }
+
+        private ContactModel UpdateImage(int id, HttpPostedFileBase image)
+        {
+            using (var repository = new ContactRepository())
+            {
+                return this.UpdateImage(id, image, repository);
+            }
+        }
+
+        private ContactModel UpdateImage(int id, HttpPostedFileBase image, ContactRepository repository)
+        {
+            var url = this.SaveImage(id, image);
+            return (ContactModel)repository.UpdateImageUrl(id, url);
         }
         #endregion
     }

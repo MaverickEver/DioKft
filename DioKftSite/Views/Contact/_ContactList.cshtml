@@ -1,0 +1,7 @@
+﻿@model System.Collections.Generic.IEnumerable<MS.WebSolutions.DioKft.Models.ContactModel>
+
+
+@foreach (var item in Model)
+{
+    @Html.Partial("_ContactItem", item)
+}

@@ -1,28 +1,62 @@
-﻿@{
+﻿@model MS.WebSolutions.DioKft.Models.AdminContactModel
+
+@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 <div class="container">
     <div class="row">
-        <h2>Create new contact</h2>
+        <h2>Create new contact</h2>        
+        @using (Ajax.BeginForm("CreateContact", "Contact", new AjaxOptions { HttpMethod = "Post", InsertionMode = InsertionMode.Replace, UpdateTargetId = "contactListDiv" }, new { @class = "form-horizontal", @enctype = "multipart/form-data" }))
+        {
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="inputName">Name</label>
+                <div class="col-sm-10">
+                    @Html.TextBoxFor(m => m.NewContact.Name, new { @type = "text", @class = "form-control", @id = "inputName", @placeholder = "Enter name" })
+                </div>
+            </div>            
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="inputRole">Role</label>
+                <div class="col-sm-10">
+                    @Html.TextBoxFor(m => m.NewContact.Role, new { @type = "text", @class = "form-control", @id = "inputRole", @placeholder = "Enter role" })
+                </div>
+            </div>            
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="inputEmail">E-mail address</label>
+                <div class="col-sm-10">
+                    @Html.TextBoxFor(m => m.NewContact.Email, new { @type = "email", @class = "form-control", @id = "inputEmail", @placeholder = "Enter e-mail" })
+                </div>
+            </div>            
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="inputPhone">Phone Number</label>
+                <div class="col-sm-10">                
+                    @Html.TextBoxFor(m => m.NewContact.PhoneNumber, new { @type = "tel", @class = "form-control", @id = "inputPhone", @placeholder = "Enter Phone" })
+                </div>
+            </div>  
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="inputImage">Image</label>
+                <div class="col-sm-10">                
+                    @Html.TextBoxFor(m => m.NewContact.Image, new { @type = "file", @class = "form-control", @id = "inputImage", @placeholder = "Enter Image URL" })
+                </div>
+            </div> 
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </div>
+            </div>
+        }   
     </div>
 
     <div class="row">
         <h2>Contact list</h2>
-        <div class="col-xs-12 col-sm-offset-1">
-            @{ for (int i = 0; i < 10; i++)
-                {                    
-                    @Html.Partial("_ContactItem", i);
-                }
-            }
+        <div class="col-xs-12 col-sm-offset-1">            
+            <div id="contactListDiv">
+                @Html.Partial("_ContactList", Model.Contacts)
+            </div>
         </div>
     </div>
 </div>
-
-<style>
- 
-</style>
-
-<script>
-
-</script>

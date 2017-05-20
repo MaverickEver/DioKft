@@ -43,5 +43,29 @@ namespace MS.WebSolutions.DioKft.DataAccessLayer.Repositories
 
             return entity != null;
         }
+
+        public Contact UpdateImageUrl(int id, string imageUrl)
+        {
+            if (id == 0 || string.IsNullOrEmpty(imageUrl))
+            {
+                throw new ArgumentException("Id or imageUrl is invalid.");
+            }
+
+            Contact contact;
+            if (!this.TryGet(id, out contact))
+            {
+                throw new InvalidOperationException("ImageUrl cannot be updated: contact is not found.");
+            }
+
+            return this.UpdateImageUrl(contact, imageUrl);
+        }
+
+        public Contact UpdateImageUrl(Contact contact, string imageUrl)
+        {
+            contact.ImageUrl = imageUrl;
+            this.context.SaveChanges();
+
+            return contact;
+        }
     }
 }
