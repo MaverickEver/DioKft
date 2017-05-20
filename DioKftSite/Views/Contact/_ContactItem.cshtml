@@ -1,25 +1,44 @@
 ﻿@model MS.WebSolutions.DioKft.Models.ContactModel
 
-<div id="contactId-@Model.Id">
-    <span>@Model.Name</span>
-    <span>@Model.Role</span>
-    <span>@Model.PhoneNumber</span>
-    <span>@Model.Email</span>
-    <span>@Model.ImageUrl</span>
 
-    @*@Ajax.ActionLink("Update Image", "UpdateContactImage", "Contact", new AjaxOptions { HttpMethod = "Post", InsertionMode = InsertionMode.Replace, UpdateTargetId = "contactListDiv" }, new { @type = "file", @class = "form-control", @id = "inputImage", @placeholder = "Enter Image URL" },);*@
-    @using (Ajax.BeginForm("UpdateContactImage", "Contact", new AjaxOptions { HttpMethod = "Post", InsertionMode = InsertionMode.ReplaceWith, UpdateTargetId = $"contactId-{@Model.Id}" }, new { @enctype = "multipart/form-data" }))
-    {
-        @Html.HiddenFor(m => m.Id);
-        @Html.TextBoxFor(m => m.Image, new { @type = "file", @class = "form-control", @id = "inputImage", @placeholder = "Enter Image URL" })
+<li class="list-group-item" id="contactId-@Model.Id">    
+    <div class="row">
+        <div class="col-xs-12 col-sm-3">
+            <div class="row">
+                <img style="margin-left:auto;margin-right:auto;display:block;" src="@Href(Model.ImageUrl)" class="img-responsive img-circle" width="150" height="150">
+            </div>
+            <div class="row">
+                <div style="text-align:center">@Model.Name</div>
+            </div>
+            <div class="row">
+                <div style="text-align:center">@Model.Role</div>
+            </div>
+            <div class="row">
+                <div style="text-align:center">@Model.PhoneNumber</div>
+            </div>
+            <div class="row">
+                <div style="text-align:center">@Model.Email</div>
+            </div>
+        </div>    
+        <div class="col-xs-12 col-sm-7 col-sm-offset-1">
+            <div class="row" style="margin-bottom:40px; margin-top:40px;height:50px;">
+                @using (Html.BeginForm("UpdateContactImage", "Contact", FormMethod.Post, new { @enctype = "multipart/form-data", @class= "input-group col-xs-12" }))
+                {
+                    @Html.HiddenFor(m => m.Id);
 
-        <button type="submit" class="btn btn-default">Update Image</button>
-    }
+                    <label class="control-label">Select New Image</label>
+                    @Html.TextBoxFor(m => m.Image, new { @type = "file", @class = "file", @data_show_preview = "false", @data_browse_class = "btn btn-primary btn-sm", @id = "inputImage", @placeholder = "Enter Image URL" })
+                }                
+            </div>
+            <div class="row" style="margin-bottom:40px;">
+                @using (Html.BeginForm("RemoveContact", "Contact", FormMethod.Post, new { @class = "input-group col-xs-12" }))
+                {
+                    @Html.HiddenFor(m => m.Id);
+                    @Html.HiddenFor(m => m.ImageUrl);
 
-    @using (Ajax.BeginForm("RemoveContact", "Contact", new AjaxOptions { HttpMethod = "Post", InsertionMode = InsertionMode.ReplaceWith, UpdateTargetId = $"contactId-{@Model.Id}" }, new { @enctype = "multipart/form-data" }))
-    {
-        @Html.HiddenFor(m => m.Id);        
-
-        <button type="submit" class="btn btn-default">Delete</button>
-    }
-</div>
+                    <button type="submit" class="btn btn-danger">Delete Contact</button>
+                }
+            </div>
+        </div>
+    </div>        
+</li>

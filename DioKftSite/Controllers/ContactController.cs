@@ -54,17 +54,21 @@ namespace MS.WebSolutions.DioKft.Controllers
                 return Json("Saving of new contact has been failed.");                
             }
 
-            return PartialView("_ContactList",this.GetAllContacts());
+            //return PartialView("_ContactList",this.GetAllContacts());
+            return RedirectToAction("Admin");
         }
 
         [HttpPost]
-        public ActionResult RemoveContact(int id)
+        public ActionResult RemoveContact(int id, string imageUrl)
         {
             try
             {
                 using (var repository = new ContactRepository())
                 {
                     repository.Delete(id);
+
+                    var serverImageUrl = Server.MapPath(imageUrl);
+                    this.RemoveImage(serverImageUrl);
                 }
             }
             catch
@@ -72,7 +76,8 @@ namespace MS.WebSolutions.DioKft.Controllers
                 return Json("Removing contact has been failed.");
             }
 
-            return Content(string.Empty);
+            //return Content(string.Empty);
+            return RedirectToAction("Admin");
         }
 
         [HttpPost]
@@ -88,7 +93,8 @@ namespace MS.WebSolutions.DioKft.Controllers
                 return Json("Updating contact has been failed.");
             }
 
-            return PartialView("_ContactItem", contactModel);
+            //return PartialView("_ContactItem", contactModel);
+            return RedirectToAction("Admin");
         }       
 
         #region [BusinessLogic]
