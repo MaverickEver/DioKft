@@ -158,6 +158,13 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\FileInput\fileinput.css" />
     <Content Include="Content\FileInput\fileinput.min.css" />
+    <Content Include="bin\Images\background.jpg" />
+    <Content Include="bin\Images\dio_logo.png" />
+    <Content Include="bin\Images\dio_logo_felirat.png" />
+    <Content Include="Content\Images\about.jpg" />
+    <Content Include="Content\Images\background.jpg" />
+    <Content Include="Content\Images\dio_logo.png" />
+    <Content Include="Content\Images\dio_logo_felirat.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -193,12 +200,12 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Contact\Admin.cshtml" />
     <Content Include="Views\Contact\_ContactItem.cshtml" />
     <Content Include="Views\Contact\Index.cshtml" />
     <Content Include="Views\Contact\_ContactList.cshtml" />
+    <Content Include="Views\Home\_Slider.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

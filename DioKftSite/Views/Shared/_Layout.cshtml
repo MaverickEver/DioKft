@@ -8,21 +8,89 @@
     @Scripts.Render("~/bundles/modernizr")    
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script type="text/javascript" src="@Href("~/Scripts/FileInput/fileinput.js")"></script>
+    <link href="@Href("~/Content/FileInput/fileinput.css")" rel="stylesheet" />
+    @RenderSection("scripts", required: false)
+
+
+    <script type="text/javascript">
+        $(document).ready(function ($) {
+            var url = window.location.pathname;
+            $('.nav a[href="' + url + '"]').parent().addClass('selected');
+        });
+    </script>
+
+    <style type="text/css">
+        .navbar {
+            background: url(@Href("~/Content/Images/background.jpg"));
+        }
+
+        .navbar-nav{
+            padding-top: 25px;
+            padding-left: 15px;
+        }
+
+        .navbar-default .navbar-nav > li > a {
+            color:#125027;
+            padding-left:10px;
+            padding-right:10px;
+        }
+
+        .navbar-default .navbar-nav > li > a:hover{
+            color:#e6e6e6;
+        }
+
+        .navbar-default .navbar-nav > li > a:after{
+            content:'';
+            border-right: 1px solid #125027;
+            margin-top:15px;
+            margin-left:20px;
+         }
+
+        .navbar-default .navbar-nav > li:last-child > a:after{
+            border: none;
+            margin: 0;
+        }
+
+        .navbar-brand{
+            padding: 0;
+        }
+
+        .nav-item.selected a:after{
+            content:'';
+            color:#e6e6e6;
+            border-bottom: 1px solid #125027;
+        }
+
+        .nav-item.selected a{
+            color:#e6e6e6 !important;
+        }
+    </style>
+
+    <div class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
+                <a class="navbar-brand" href=".">
+                    <img src="~/Content/Images/dio_logo_felirat.png" />
+                    <img src="~/Content/Images/dio_logo.png" />
+                </a>        
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @*@Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })*@
             </div>
-            <div class="navbar-collapse collapse">
+            <div class="navbar-collapse collapse">                
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Index", "Contact")</li>
+                    <li class="nav-item" >@Html.ActionLink("About", "Index", "Home")</li>
+                    <li class="nav-item"><a>Services</a></li>
+                    <li class="nav-item"><a>Products</a></li>
+                    <li class="nav-item"><a>News</a></li>
+                    <li class="nav-item"><a>Galery</a></li>
+                    <li class="nav-item"> @Html.ActionLink("Contact", "Index", "Contact")</li>
                 </ul>
             </div>
         </div>
@@ -31,14 +99,8 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>&copy; @DateTime.Now.Year - DIÓ 896 Kft.</p>
         </footer>
     </div>
-
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")    
-    <script type="text/javascript" src="@Href("~/Scripts/FileInput/fileinput.js")"></script>
-    <link href="@Href("~/Content/FileInput/fileinput.css")" rel="stylesheet" />
-    @RenderSection("scripts", required: false)
 </body>
 </html>
