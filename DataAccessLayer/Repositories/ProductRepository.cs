@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using MS.WebSolutions.DioKft.DataAccessLayer.Repositories;
 using MS.WebSolutions.DioKft.DataAccessLayer.Contexts;
+using System.Data.Entity;
 
 namespace MS.WebSolutions.DioKft.DataAccessLayer.Entities
 {
@@ -19,8 +20,9 @@ namespace MS.WebSolutions.DioKft.DataAccessLayer.Entities
                 
         public IEnumerable<Product> ListAll()
         {
-            return (from p in this.context.Products
-                   select p).ToList();
+            var query = this.context.Products.Include("Unit");
+            return (from p in query
+                    select p).ToList();
         }
 
         public void Save(Product entity)
@@ -36,11 +38,26 @@ namespace MS.WebSolutions.DioKft.DataAccessLayer.Entities
 
         public bool TryGet(int id, out Product entity)
         {
-            entity = (from p in this.context.Products
-                          where p.Id == id
-                          select p).SingleOrDefault();
+            var query = this.context.Products.Include("Unit");
+            entity = (from p in query
+                      where p.Id == id
+                      select p).SingleOrDefault();
 
             return entity != null;
+        }
+
+        public IEnumerable<Product> ListAllByCategory(int id)
+        {           
+            return (from p in this.context.Products
+                    join c in this.context.Categories on p.CategoryId equals c.Id
+                    where c.Id == id
+                    select p).Include(p=>p.Unit).ToList();
+        }
+
+        public IEnumerable<Category> ListAllCategories()
+        {
+            return (from p in this.context.Categories
+                    select p).ToList();
         }
     }
 }

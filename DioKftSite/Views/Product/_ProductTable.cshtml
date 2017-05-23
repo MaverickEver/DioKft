@@ -1,0 +1,21 @@
+﻿@model IEnumerable<MS.WebSolutions.DioKft.Models.ProductModel>
+
+<div class="row">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Unit</th>                
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model)
+            {
+                <tr>
+                    <td>@product.Name</td>
+                    <td>@product.Unit</td>                    
+                </tr>
+            }                       
+        </tbody>
+    </table>
+</div>

@@ -5,24 +5,45 @@ using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Web;
-using System.IO;
+using MS.WebSolutions.DioKft.Models.ViewModels;
+using System.Net.Mail;
+using System.Threading.Tasks;
+using MS.WebSolutions.DioKft.Helpers;
 
 namespace MS.WebSolutions.DioKft.Controllers
 {
     public class ContactController : Controller
     {
+
         // GET: Contact
         public ActionResult Index()
         {
-            var contacts = this.GetAllContacts();
-            return View(contacts);
+            var viewModel = new ContactViewModel { Contacts = this.GetAllContacts() };
+            return View(viewModel);
         }
 
         public ActionResult Admin()
         {
-            var model = new AdminContactModel { Contacts = this.GetAllContacts() };       
-            return View(model);
+            var viewModel = new AdminContactViewModel { Contacts = this.GetAllContacts() };       
+            return View(viewModel);
         }
+
+        [HttpPost]
+        public ActionResult SendEmail(Email email)
+        {
+            MailMessage message = CreateEmailMessage(email);
+
+            try
+            {
+                SendEmailMessage(message);
+            }
+            catch
+            {
+                return Json("A problem has occured during contacting us. Please try it again!");
+            }
+
+            return Json("Email has been sent.");
+        }        
 
         [HttpPost]
         public ActionResult CreateContact(ContactModel newContact)
@@ -50,11 +71,12 @@ namespace MS.WebSolutions.DioKft.Controllers
             }
             catch
             {
-                this.RemoveImage(contactToSave.ImageUrl);
+                var fileHandler = new FileHandler(Server);
+                fileHandler.Remove(contactToSave.ImageUrl);
+                
                 return Json("Saving of new contact has been failed.");                
             }
 
-            //return PartialView("_ContactList",this.GetAllContacts());
             return RedirectToAction("Admin");
         }
 
@@ -67,8 +89,8 @@ namespace MS.WebSolutions.DioKft.Controllers
                 {
                     repository.Delete(id);
 
-                    var serverImageUrl = Server.MapPath(imageUrl);
-                    this.RemoveImage(serverImageUrl);
+                    var fileHandler = new FileHandler(Server);
+                    fileHandler.Remove(imageUrl);
                 }
             }
             catch
@@ -76,7 +98,6 @@ namespace MS.WebSolutions.DioKft.Controllers
                 return Json("Removing contact has been failed.");
             }
 
-            //return Content(string.Empty);
             return RedirectToAction("Admin");
         }
 
@@ -93,7 +114,6 @@ namespace MS.WebSolutions.DioKft.Controllers
                 return Json("Updating contact has been failed.");
             }
 
-            //return PartialView("_ContactItem", contactModel);
             return RedirectToAction("Admin");
         }       
 
@@ -116,31 +136,6 @@ namespace MS.WebSolutions.DioKft.Controllers
             return contactModelList;
         }
 
-        private string SaveImage(int id, HttpPostedFileBase image)
-        {
-            var path = string.Empty;
-            try
-            {
-                var extension = Path.GetExtension(image.FileName);
-                path = $"~/Content/DynamicResources/ContactImages/{id}{extension}";
-                var serverPath = Server.MapPath(path);
-                image.SaveAs(serverPath);
-            }
-            catch
-            {
-                return string.Empty;
-            }
-            
-            return path;
-        }
-
-        private void RemoveImage(string imageurl)
-        {
-            if (!System.IO.File.Exists(imageurl)) { return; }
-
-            System.IO.File.Delete(imageurl);
-        }
-
         private ContactModel UpdateImage(int id, HttpPostedFileBase image)
         {
             using (var repository = new ContactRepository())
@@ -151,8 +146,29 @@ namespace MS.WebSolutions.DioKft.Controllers
 
         private ContactModel UpdateImage(int id, HttpPostedFileBase image, ContactRepository repository)
         {
-            var url = this.SaveImage(id, image);
+            var fileHandler = new FileHandler(Server);
+            var url = fileHandler.Save(id, image, FileLocations.ContactImages);
             return (ContactModel)repository.UpdateImageUrl(id, url);
+        }
+
+        private void SendEmailMessage(MailMessage message)
+        {
+            using (var smtp = new SmtpClient())
+            {
+                 smtp.Send(message);
+            }
+        }
+
+        private static MailMessage CreateEmailMessage(Email newEmail)
+        {
+            var body = "<p>Email From: {0} ({1})</p><p>Message:</p><p>{2}</p>";
+            var message = new MailMessage();
+            message.To.Add(new MailAddress("sapi.mihaly@gmail.com"));
+            message.From = new MailAddress(newEmail.EmailAddress);
+            message.Subject = "New Request from diokft.hu website.";
+            message.Body = string.Format(body, newEmail.Name, newEmail.EmailAddress, newEmail.Message);
+            message.IsBodyHtml = true;
+            return message;
         }
         #endregion
     }

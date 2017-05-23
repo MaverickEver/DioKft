@@ -1,0 +1,14 @@
+﻿@model MS.WebSolutions.DioKft.Models.ViewModels.AdminProductViewModel
+@{
+    ViewBag.Title = "Admin";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Product Editor</h2>
+
+@using (Html.BeginForm("Import", "Product", FormMethod.Post, new { @enctype = "multipart/form-data", @class = "" }))
+{
+    <label class="control-label">Select CSV file to import product. Format information...</label>
+    @Html.TextBoxFor(m => m.ProductCsv, new { @type = "file", @class = "file", @data_show_preview = "false", @data_browse_class = "btn btn-primary btn-sm", @id = "inputCsv", @placeholder = "Enter CSV Path" })
+}
+
