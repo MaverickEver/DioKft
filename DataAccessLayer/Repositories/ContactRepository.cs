@@ -28,7 +28,7 @@ namespace MS.WebSolutions.DioKft.DataAccessLayer.Repositories
         {
             if (entity is null)
             {
-                throw new ArgumentNullException($"{nameof(entity)}");
+                throw new ArgumentNullException($"Entity cannot be null.");
             }
 
             this.context.Contacts.Add(entity);
