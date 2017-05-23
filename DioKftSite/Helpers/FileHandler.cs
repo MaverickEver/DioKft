@@ -18,6 +18,13 @@ namespace MS.WebSolutions.DioKft.Helpers
             try
             {
                 var extension = Path.GetExtension(image.FileName);
+                var folderPath = this.server.MapPath($"~/Content/DynamicResources/{location.ToString()}");
+
+                if (!Directory.Exists(folderPath))
+                {
+                    Directory.CreateDirectory(folderPath);
+                }
+
                 path = $"~/Content/DynamicResources/{location.ToString()}/{id}{extension}";
                 var serverPath = server.MapPath(path);
                 image.SaveAs(serverPath);

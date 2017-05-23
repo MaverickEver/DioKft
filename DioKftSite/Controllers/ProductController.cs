@@ -58,9 +58,9 @@ namespace MS.WebSolutions.DioKft.Controllers
 
                 this.ExecuteImport(productCsv, fileHandler, importer);                
             }
-            catch
+            catch (Exception ex)
             {
-                return Json("Import has been failed.");
+                return Json("Import has been failed. Exception: " + ex.Message);
             }
 
             return Json("Import has been finished.");

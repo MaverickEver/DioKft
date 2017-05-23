@@ -48,7 +48,7 @@ namespace MS.WebSolutions.DioKft.DataAccessLayer.Repositories
         {
             if (id == 0 || string.IsNullOrEmpty(imageUrl))
             {
-                throw new ArgumentException("Id or imageUrl is invalid.");
+                throw new ArgumentException($"Id or imageUrl is invalid. Id:{id}, url:{imageUrl}");
             }
 
             Contact contact;

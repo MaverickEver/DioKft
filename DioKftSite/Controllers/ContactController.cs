@@ -37,9 +37,9 @@ namespace MS.WebSolutions.DioKft.Controllers
             {
                 SendEmailMessage(message);
             }
-            catch
+            catch (Exception ex)
             {
-                return Json("A problem has occured during contacting us. Please try it again!");
+                return Json("A problem has occured during contacting us. Please try it again! Exception: " + ex.Message);
             }
 
             return Json("Email has been sent.");
@@ -61,21 +61,21 @@ namespace MS.WebSolutions.DioKft.Controllers
                 Role = newContact.Role               
             };            
 
-            try
-            {
+            //try
+            //{
                 using (var repository = new ContactRepository())
                 {
                     repository.Save(contactToSave);
                     this.UpdateImage(contactToSave.Id, newContact.Image, repository);
                 }
-            }
-            catch
-            {
-                var fileHandler = new FileHandler(Server);
-                fileHandler.Remove(contactToSave.ImageUrl);
+            //}
+            //catch (Exception ex)
+            //{
+            //    var fileHandler = new FileHandler(Server);
+            //    fileHandler.Remove(contactToSave.ImageUrl);
                 
-                return Json("Saving of new contact has been failed.");                
-            }
+            //    return Json("Saving of new contact has been failed. Exception: " + ex.Message );                
+            //}
 
             return RedirectToAction("Admin");
         }
@@ -93,9 +93,9 @@ namespace MS.WebSolutions.DioKft.Controllers
                     fileHandler.Remove(imageUrl);
                 }
             }
-            catch
+            catch (Exception ex)
             {                
-                return Json("Removing contact has been failed.");
+                return Json("Removing contact has been failed. Exception: " + ex.Message);
             }
 
             return RedirectToAction("Admin");
@@ -109,9 +109,9 @@ namespace MS.WebSolutions.DioKft.Controllers
             {
                 contactModel = this.UpdateImage(id, image);
             }
-            catch
+            catch (Exception ex)
             {
-                return Json("Updating contact has been failed.");
+                return Json("Updating contact has been failed. Exception: " + ex.Message);
             }
 
             return RedirectToAction("Admin");
